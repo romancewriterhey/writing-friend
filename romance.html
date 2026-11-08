@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>浪漫產生器｜Miya 的創作靈感庫</title>
+<style>
+:root{--main:#EAD5F5;--deep:#7a4a9a;--bg:#fff;--card:#faf4fd;--text:#3a2748;--mute:#7d6a8a;--line:#eddcf6;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1424;--card:#2a1d34;--text:#f3e9fa;--mute:#b9a5c8;--line:#41304f;--deep:#EAD5F5;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1424;--card:#2a1d34;--text:#f3e9fa;--mute:#b9a5c8;--line:#41304f;--deep:#EAD5F5;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+a.back{display:inline-block;margin-bottom:12px;color:var(--deep);text-decoration:none;font-size:.92rem}
+header{background:var(--main);color:#3a2748;border-radius:20px;padding:22px 20px;margin-bottom:16px}
+h1{margin:0;font-size:1.5rem}header p{margin:6px 0 0;font-size:.92rem}
+nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+nav button,.btn{border:1px solid var(--main);background:var(--bg);color:var(--text);padding:8px 16px;border-radius:999px;cursor:pointer;font:inherit;font-size:.9rem}
+nav button.on,.btn.primary,.btn.on{background:var(--main);color:#3a2748;font-weight:600}
+.btn.primary{padding:11px 26px;font-size:1rem}
+section{display:none}section.on{display:block}
+.slot{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start}
+.slot .lb{font-size:.76rem;color:var(--deep);font-weight:700;min-width:4.5em;padding-top:3px}
+.slot .tx{flex:1}
+.lk{border:none;background:none;cursor:pointer;font-size:1.1rem;opacity:.45}.lk.on{opacity:1}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.hint{color:var(--mute);font-size:.85rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.card h3{margin:0 0 6px;font-size:1rem;color:var(--deep)}
+.fav{border-left:4px solid var(--main);padding:8px 12px;margin:8px 0;background:var(--card);border-radius:8px;font-size:.9rem;white-space:pre-wrap}
+input{font:inherit;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);width:100%;margin-top:8px}
+li{padding:5px 0;border-bottom:1px solid var(--line);font-size:.93rem}ul{list-style:none;padding:0;margin:8px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← 回到溫柔靈感庫</a>
+<header><h1>💜 浪漫產生器</h1><p>現代言情與 Contemporary Romance 的人設、套路、狗血劇情與短篇練習。</p></header>
+<nav id="tabs"></nav>
+
+<section id="gen">
+<div id="slots"></div>
+<div class="row"><button class="btn primary" id="roll">🎲 抽一組</button><button class="btn" id="save">💾 收藏</button><button class="btn" id="copy">📋 複製</button></div>
+<p class="hint">點 🔒 鎖住一格再重抽。收藏只存在這個瀏覽器裡。</p>
+<h3>收藏</h3><div id="favs"></div>
+</section>
+
+<section id="all">
+<div class="row" id="chips" style="margin-bottom:0"></div>
+<input id="q" placeholder="搜尋關鍵字，例如：契約、鄰居、失憶">
+<p class="hint" id="cnt"></p><ul id="list"></ul>
+</section>
+
+<section id="prac">
+<div class="card"><h3>短篇練習情境</h3><div id="ptxt" style="font-size:1.05rem;min-height:3em"></div><div class="row"><button class="btn primary" id="pbtn">換一個情境</button></div></div>
+<p class="hint">建議：只寫 300–800 字，不求結局，只寫那一個場景。</p>
+</section>
+</div>
+<script>
+var C={
+"人設・台灣言情":["霸道總裁與平凡女職員","溫柔多金的醫生學長","冷面律師與直率助理","青梅竹馬的鄰家哥哥","千金小姐與家裡司機的兒子","財閥繼承人隱瞞身份當員工","毒舌上司其實很護短","前男友變成新上司","失憶女主與守護她的男人","為家人負債努力打工的女孩","單親媽媽與單身老闆","外冷內熱的大學教授","退休明星回鄉開咖啡店","被迫繼承家業的敗家子","假裝貧窮的富二代","冷靜秘書與衝動老闆","全能管家式男主","愛吃醋的年下弟弟","刀子嘴豆腐心的女主管","被家族安排聯姻的兩人"],
+"套路・台灣言情":["契約婚姻","先婚後愛","假戀愛真動心","一夜之後的意外","隱婚","雨中送傘","被誤會的離開","懷孕逃跑，多年後帶孩子重逢","替身誤會，最後證明愛的是本人","豪門婆婆刁難","追妻火葬場","女主離開後男主才醒悟","互相暗戀卻都不說","被迫同居","假扮情侶見家長","英雄救美","酒後告白","辦公室地下戀情","為愛放棄事業又被找回","總裁的初戀其實是她"],
+"套路・英美 Contemporary":["Enemies to Lovers（死對頭變情人）","Friends to Lovers（朋友變情人）","Fake Dating（假交往）","Forced Proximity（被迫相處，如暴風雪）","Grumpy × Sunshine（壞脾氣×小太陽）","Second Chance（舊情復燃）","Only One Bed（只剩一張床）","Marriage of Convenience（便宜婚姻）","Secret Identity（隱藏身份）","Brother's Best Friend（哥哥的好友）","Roommates to Lovers（室友變戀人）","Pen Pals（筆友）","Workplace Rivals（職場對手）","Small Town Return（返鄉小鎮）","Celebrity × Normal（名人×普通人）","Single Dad（單親爸爸）","Age Gap（年齡差）","Opposites Attract（反差吸引）","Wedding Date（婚禮伴侶）","Fake Engagement（假訂婚）","Matchmaker（媒人自己陷入）","Accidental Text（傳錯訊息）","Neighbors（鄰居）","Coffee Shop（咖啡店日常）","Holiday Romance（假期戀曲）","He Falls First（他先動心）","She Falls First（她先動心）","Mutual Pining（互相暗戀）","Bodyguard（保鏢）","Sports Romance（運動員戀愛）","Reformed Playboy（浪子回頭）","Found Family（家人般的團體）","Slow Burn（慢熱）","Boss × Employee（上司與下屬）","Fish Out of Water（異地新環境）","Bookish Romance（書呆戀愛）"],
+"套路・YA 現代":["高中最後一年的暑假","轉學生與校內風雲人物","書呆與校草","家教與學生的同齡版","運動社團的經理人","暑期打工遇到的人","畢業舞會邀約","筆友原來就在隔壁班","社團幹部競爭","被迫同組的專題報告"],
+"套路・Reverse Harem（現代）":["一個女主與三個互相競爭的男人","室友們都喜歡她","兄弟三人同時愛上她","創業團隊裡的四位男人","她拒絕選擇，直到彼此都說實話","男人們彼此是好友、共同守護她","女主主導關係，他們都尊重她的節奏","咖啡店老闆們的共同暗戀","兩男一女的現代三人關係，全員同意","一個大家族的幾位繼承人都想接近她"],
+"狗血劇情・90s 台劇":["外遇被發現","三角戀","多角戀全員修成正果","認錯親","失憶","抱錯嬰兒","絕症","車禍","雙胞胎互換","假死","出軌丈夫與小三","小三扶正","前妻回歸","私生子","家族爭產","惡婆婆","惡毒繼母","被迫簽離婚協議","被誣陷入獄","兩家世仇","青梅竹馬變情敵","好友背叛","失蹤二十年的父親回來","逃婚","前任帶孩子回來","婚外情當事人最後互相道歉和解","男二默默守護一輩子","女配角突然覺醒","破產千金打工","流落街頭的貴公子"],
+"短篇練習情境":["電梯停電十分鐘","雨天只剩一把傘","訊息傳錯給喜歡的人","婚禮上遇到前任","被一起鎖在儲藏室","咖啡店收錯錢","被誤當成情侶","搭錯高鐵","深夜便利商店","陽台上的鄰居對話","一張寫錯收件人的卡片","搬家時發現前租客的信","排隊買限量甜點","颱風夜停電","臨時扮演情侶","迷路的狗帶來新鄰居","補習班遇到老同學","醫院裡的陪伴","班機延誤","一封遲來的道歉","家人聚餐被催婚","午夜的泡麵","失眠時的語音留言","公司尾牙抽獎","朋友婚禮的伴郎伴娘","打錯電話","同學會","在書店伸手拿同一本書","在屋頂曬衣服時的對話","下班後被留下加班"]};
+var K=Object.keys(C);
+var SL=[["人設",["人設・台灣言情"]],["套路",["套路・台灣言情","套路・英美 Contemporary","套路・YA 現代","套路・Reverse Harem（現代）"]],["狗血劇情",["狗血劇情・90s 台劇"]],["短篇情境",["短篇練習情境"]]];
+var st={},lk={},favs=[],cat="全部";
+function $(i){return document.getElementById(i)}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function pool(ks){var r=[];ks.forEach(function(k){r=r.concat(C[k])});return r}
+function load(){try{favs=JSON.parse(localStorage.getItem("rf")||"[]")}catch(e){}}
+function store(){try{localStorage.setItem("rf",JSON.stringify(favs))}catch(e){}}
+function roll(){SL.forEach(function(s){if(!lk[s[0]])st[s[0]]=pick(pool(s[1]))});draw()}
+function draw(){$("slots").innerHTML=SL.map(function(s){var k=s[0];return '<div class="slot"><div class="lb">'+k+'</div><div class="tx">'+(st[k]||'')+'</div><button class="lk'+(lk[k]?' on':'')+'" data-k="'+k+'">'+(lk[k]?'🔒':'🔓')+'</button></div>'}).join("");
+document.querySelectorAll(".lk").forEach(function(b){b.onclick=function(){lk[b.dataset.k]=!lk[b.dataset.k];draw()}})}
+function text(){return SL.map(function(s){return "【"+s[0]+"】"+st[s[0]]}).join("\n")}
+function drawFavs(){$("favs").innerHTML=favs.length?favs.map(function(f,i){return '<div class="fav">'+f+'<div><button class="btn" data-i="'+i+'" style="margin-top:6px;padding:3px 12px">刪除</button></div></div>'}).join(""):'<p class="hint">還沒有收藏。</p>';
+document.querySelectorAll(".fav .btn").forEach(function(b){b.onclick=function(){favs.splice(+b.dataset.i,1);store();drawFavs()}})}
+function list(){var q=$("q").value.trim().toLowerCase(),out=[];K.forEach(function(k){if(cat==="全部"||cat===k)C[k].forEach(function(x){if(!q||x.toLowerCase().indexOf(q)>-1)out.push(x)})});
+$("cnt").textContent="共 "+out.length+" 個（全部 "+pool(K).length+" 個）";$("list").innerHTML=out.map(function(x){return '<li>'+x+'</li>'}).join("")}
+function chips(){$("chips").innerHTML=["全部"].concat(K).map(function(k){return '<button class="btn'+(k===cat?' on':'')+'" data-c="'+k+'">'+k+'</button>'}).join("");
+document.querySelectorAll("#chips .btn").forEach(function(b){b.onclick=function(){cat=b.dataset.c;chips();list()}})}
+function show(id){["gen","all","prac"].forEach(function(s){$(s).className=s===id?"on":""});document.querySelectorAll("#tabs button").forEach(function(b){b.className=b.dataset.t===id?"on":""})}
+$("tabs").innerHTML=[["gen","🎲 抽一組"],["all","📚 全部清單"],["prac","✍️ 短篇練習"]].map(function(t){return '<button data-t="'+t[0]+'">'+t[1]+'</button>'}).join("");
+document.querySelectorAll("#tabs button").forEach(function(b){b.onclick=function(){show(b.dataset.t)}});
+$("roll").onclick=roll;
+$("save").onclick=function(){favs.unshift(text());store();drawFavs()};
+$("copy").onclick=function(){try{navigator.clipboard.writeText(text())}catch(e){}};
+$("q").oninput=list;
+$("pbtn").onclick=function(){$("ptxt").textContent=pick(C["短篇練習情境"])};
+load();show("gen");roll();drawFavs();chips();list();$("pbtn").click();
+</script>
+</body>
+</html>

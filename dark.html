@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>黑暗蟲洞｜Miya 的創作靈感庫</title>
+<style>
+:root{--main:#3a3d42;--bg:#1e2023;--card:#2a2d31;--text:#e6e7ea;--mute:#9b9ea5;--line:#40444a;--acc:#BACCFF;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--main:#4a4d52;--bg:#e8e9eb;--card:#f4f4f5;--text:#26282b;--mute:#5d6066;--line:#c9cbd0;--acc:#3a4f94;color-scheme:light}}
+:root[data-theme="light"]{--main:#4a4d52;--bg:#e8e9eb;--card:#f4f4f5;--text:#26282b;--mute:#5d6066;--line:#c9cbd0;--acc:#3a4f94;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+header{background:var(--main);color:#f2f3f5;border-radius:20px;padding:22px 20px;margin-bottom:16px}
+h1{margin:0;font-size:1.5rem}header p{margin:6px 0 0;font-size:.9rem;color:#c9cbd0}
+a.back{display:inline-block;margin-bottom:12px;color:var(--acc);text-decoration:none;font-size:.92rem}
+.slot{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start}
+.slot .lb{font-size:.76rem;color:var(--acc);font-weight:700;min-width:4.5em;padding-top:3px}
+.slot .tx{flex:1}
+.lk{border:none;background:none;cursor:pointer;font-size:1.1rem;opacity:.45}.lk.on{opacity:1}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--text);padding:8px 16px;border-radius:999px;cursor:pointer;font:inherit;font-size:.92rem}
+.btn.primary{background:var(--main);color:#fff;border-color:var(--acc);padding:11px 26px;font-size:1rem}
+.hint{color:var(--mute);font-size:.85rem}
+.fav{border-left:4px solid var(--acc);padding:8px 12px;margin:8px 0;background:var(--card);border-radius:8px;font-size:.9rem;white-space:pre-wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.card h3{margin:0 0 6px;font-size:1rem;color:var(--acc)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← 回到溫柔靈感庫</a>
+<header><h1>🕳️ 黑暗蟲洞</h1><p>龐大、陰暗、燒腦的題材放這裡。與日常溫柔的故事分開收納。</p></header>
+<div id="slots"></div>
+<div class="row"><button class="btn primary" id="roll">🌀 墜入蟲洞</button><button class="btn" id="save">💾 收藏</button><button class="btn" id="copy">📋 複製</button></div>
+<p class="hint">點 🔒 鎖住一格再重抽。收藏只存在這個瀏覽器裡。</p>
+<div class="card"><h3>卡關小任務</h3><div id="task"></div><div class="row" style="margin-bottom:0"><button class="btn" id="taskBtn">換一個</button></div></div>
+<h3>收藏</h3><div id="favs"></div>
+</div>
+<script>
+var P={
+"主角":["被家族刻意排除在核心之外的旁系女兒","剛接下遺產的人，發現遺囑附帶一份名單","寫計聞的記者，發現自己的名字出現在別人的訃聞草稿","基金會的年輕行政，因為一份誤送的文件被捲入","重病痊癒後帶著說不清的感知回來的人","看似最無害的家庭醫師，其實掌握所有人的祕密","只有她記得上一輪時間的人","溫柔卻不被信任的證人"],
+"權力結構":["跨三代的政商家族聯盟","沒有名字的年度密會，成員靠信物互認","以慈善為名的基金會","表面是讀書會的祕密社團","舊政權留下的檔案室與看守者","學院內部的永久董事會","只在雨夜開門的俱樂部"],
+"核心祕密":["多年前那場事故不是意外","名單上每個人的『消失』都有編號","被抹去的一段歷史藏在一本帳冊裡","一份契約約定了下一代的婚姻","整個組織在守護的其實是一個孩子","第一任會長從未死去","一場實驗讓部分人擁有跨越時間的記憶"],
+"科幻／神祕機制":["時間回溯，只有觸發者保有記憶","意識可以被短暫借出，代價是失去一段記憶","夢境彼此相連，進去的人會被改寫","一套特定的動作能開啟另一個維度（The OA 式）","重複的一天，每次只能改變一件小事","地下設施封存了上一個文明的紀錄","記憶可以被備份，但備份不等於本人"],
+"代價與倫理":["救一個人，就要讓另一個人消失","真相公開會毀掉最無辜的人","她可以離開，但離開就等於背叛","記憶回來後，原本的感情不見了","愈接近真相，愈不確定自己是誰"],
+"場景":["90 年代的老洋房與家族宴會廳","霧氣很重的山莊","沒有窗戶的檔案館","封閉的地下社區（Silo 式）","廢棄的療養院","深夜的政商餐會","雨季才開放的圖書館地下室"],
+"轉折":["最信任的人其實是看守者","她以為的敵人在默默保護她","時間線已經被別人改過","名單上的最後一個名字是她自己","她被告知的『過去』是被植入的","所有人都在演同一齣戲，只有她沒拿到劇本"],
+"結尾基調":["苦澀，但留下希望","犧牲後換來一個安靜的清晨","開放式：鑰匙還在她手上","一切歸零，兩人在新的時間線重新認識","真相公開，代價由所有人一起承擔"]};
+var KEYS=Object.keys(P),state={},locks={},favs=[];
+var TASKS=["寫出這個組織的規矩三條，其中一條要讓人不安。","用一頁寫主角第一次發現異常的瞬間，不要解釋原因。","列出這個謎團的 5 條線索，其中 2 條是誤導。","為這個世界寫一個只有內部人才懂的暗號。","寫一場只有對話、沒有說明的密會。","決定：誰在說謊？先寫答案，再回頭藏線索。"];
+function $(i){return document.getElementById(i)}
+function load(){try{favs=JSON.parse(localStorage.getItem("df")||"[]")}catch(e){}}
+function store(){try{localStorage.setItem("df",JSON.stringify(favs))}catch(e){}}
+function roll(){KEYS.forEach(function(k){if(!locks[k]){var p=P[k];state[k]=p[Math.floor(Math.random()*p.length)]}});draw()}
+function draw(){$("slots").innerHTML=KEYS.map(function(k){return '<div class="slot"><div class="lb">'+k+'</div><div class="tx">'+(state[k]||'')+'</div><button class="lk'+(locks[k]?' on':'')+'" data-k="'+k+'">'+(locks[k]?'🔒':'🔓')+'</button></div>'}).join("");
+document.querySelectorAll(".lk").forEach(function(b){b.onclick=function(){locks[b.dataset.k]=!locks[b.dataset.k];draw()}})}
+function text(){return KEYS.map(function(k){return "【"+k+"】"+state[k]}).join("\n")}
+function drawFavs(){$("favs").innerHTML=favs.length?favs.map(function(f,i){return '<div class="fav">'+f+'<div><button class="btn" data-i="'+i+'" style="margin-top:6px;padding:3px 12px">刪除</button></div></div>'}).join(""):'<p class="hint">還沒有收藏。</p>';
+document.querySelectorAll(".fav .btn").forEach(function(b){b.onclick=function(){favs.splice(+b.dataset.i,1);store();drawFavs()}})}
+$("roll").onclick=roll;
+$("save").onclick=function(){favs.unshift(text());store();drawFavs()};
+$("copy").onclick=function(){try{navigator.clipboard.writeText(text())}catch(e){}};
+$("taskBtn").onclick=function(){$("task").textContent=TASKS[Math.floor(Math.random()*TASKS.length)]};
+load();roll();drawFavs();$("taskBtn").click();
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Miya 的創作靈感庫</title>
+<style>
+:root{--main:#BACCFF;--deep:#4a64b8;--bg:#fff;--card:#f4f7ff;--text:#26304d;--mute:#6b7699;--line:#dfe7ff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a2e;--card:#1d2644;--text:#e9eeff;--mute:#9aa6cf;--line:#2b3862;--deep:#BACCFF;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141a2e;--card:#1d2644;--text:#e9eeff;--mute:#9aa6cf;--line:#2b3862;--deep:#BACCFF;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+header{background:var(--main);color:#26304d;border-radius:20px;padding:22px 20px;margin-bottom:16px}
+h1{margin:0;font-size:1.5rem}header p{margin:6px 0 0;font-size:.92rem}
+nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+nav button,.btn{border:1px solid var(--main);background:var(--bg);color:var(--text);padding:8px 16px;border-radius:999px;cursor:pointer;font:inherit;font-size:.92rem}
+nav button.on,.btn.primary{background:var(--main);color:#26304d;font-weight:600}
+.btn.primary{padding:11px 26px;font-size:1rem}
+section{display:none}section.on{display:block}
+.slot{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start}
+.slot .lb{font-size:.76rem;color:var(--deep);font-weight:700;min-width:4.5em;padding-top:3px}
+.slot .tx{flex:1}
+.slot .lk{border:none;background:none;cursor:pointer;font-size:1.1rem;opacity:.45}
+.slot .lk.on{opacity:1}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.hint{color:var(--mute);font-size:.85rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.card h3{margin:0 0 6px;font-size:1rem;color:var(--deep)}
+.fav{border-left:4px solid var(--main);padding:8px 12px;margin:8px 0;background:var(--card);border-radius:8px;font-size:.9rem;white-space:pre-wrap}
+input{font:inherit;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);flex:1;min-width:140px}
+select{font:inherit;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
+a.dark{display:block;margin-top:26px;text-align:center;background:#3a3d42;color:#f2f3f5;border-radius:16px;padding:16px;text-decoration:none;font-weight:600}
+a.dark small{display:block;font-weight:400;color:#c9cbd0;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>☀️ Miya 的創作靈感庫</h1><p>手感跑掉的時候，來抽一組。柔和、真誠、慢慢來。</p></header>
+<nav id="tabs"></nav>
+
+<section id="gen">
+<div id="slots"></div>
+<div class="row"><button class="btn primary" id="roll">🎲 抽一組靈感</button><button class="btn" id="save">💾 收藏這組</button><button class="btn" id="copy">📋 複製</button></div>
+<p class="hint">點右側 🔒 可鎖住某一格，只重抽其他格。</p>
+<div class="card"><h3>＋ 加入自己的元素</h3><div class="row" style="margin:0"><select id="addSlot"></select><input id="addTxt" placeholder="輸入新的設定或套路"><button class="btn" id="addBtn">加入</button></div></div>
+<h3>收藏</h3><div id="favs"></div>
+<a class="dark" style="background:#EAD5F5;color:#3a2748" href="romance.html">💜 浪漫產生器<small style="color:#6b4a80">現代言情・戀愛 tropes・短篇練習 →</small></a>
+<a class="dark" href="dark.html">🕳️ 黑暗蟲洞<small>較黑暗、龐大的題材 →</small></a>
+</section>
+
+<section id="rescue">
+<div class="card"><h3>卡關急救：抽一個最小任務</h3><div id="task" style="font-size:1.05rem;min-height:3em"></div><div class="row"><button class="btn primary" id="taskBtn">給我一個小任務</button></div></div>
+<div class="card"><h3>找回手感的順序</h3><p style="margin:0">① 先重看一個「最愛的場景」→ ② 寫下當時哪一點讓你心動 → ③ 把那一點換成你的角色 → ④ 只寫 100 字就可以停。</p></div>
+</section>
+</div>
+
+<script>
+var P={
+"神經特質":["成年後才確診的 AuDHD，確診前已經 masking 了二十多年","兒時就被確診 ADHD，成年後才發現自閉特質一直都在","自閉特質明顯、ADHD 較輕，靠固定的例行公事維持生活","ADHD 為主：對有興趣的事超專注，其他事全部沉底","還沒有正式確診，只是長期覺得自己哪裡不一樣","確診多年、很了解自己，但身邊的人還在學","AuDHD：想要規律又想要新鮮，兩種需求每天互相拉扯","自閉特質、說話不多，但文字表達很細膩","ADHD 加高敏感：情緒來得快，但記很久"],
+"職業與日常":["急診室護理師，在混亂中反而最穩","離婚後轉行的前法務，習慣用條列與規則生活","鄉下長大的獸醫，動物比人好懂","數學系博士生，完美主義、RSD 很重","深夜廣播的剪輯師，生活一團亂但作品精準","基層公務員，拖延卻超有責任感","結構工程師，用數字表達感情","中年轉職的廚師，氣味與味覺世界特別細","戶外嚮導，追求新鮮感、不習慣穩定關係","活動企劃，朋友很多，但沒人知道她多累","圖書館館員，喜歡分類，討厭突然的變動","植物研究員，與土壤、溫度、時間相處"],
+"性格底色":["外向話多，社交完就斷電","嘴硬心軟，不太會說軟話","幽默感很黑，用玩笑擋住真心","耿直、不擅長客套，常被誤會冷淡","很愛照顧別人，不太懂照顧自己","固執、有原則，認定的事不輕易改","好奇心旺盛，三分鐘熱度但很誠懇","安靜的觀察者，但內心戲很多","容易道歉、容易自責，其實很有膽量","衝動、行動派，事後才後悔"],
+"成長背景":["在大家長制的家庭長大，學會了「得體」","從小被當成「資優」，沒有人問過她累不累","小鎮長大，第一次進大城市就迷路又著迷","家裡經營小生意，從小幫忙看店","曾經被排擠，現在還是習慣先觀察","出身富裕卻從不覺得自在","單親家庭，很早學會照顧自己","常搬家，沒有一個地方叫做「老家」","手足眾多，永遠排在中間"],
+"內在矛盾":["想被理解，又害怕被看穿","渴望穩定，又每次都先逃","很需要獨處，又怕被丟下","擅長幫別人，不擅長開口求助","想表現得「正常」，卻越來越累","很會規劃，卻總是臨場全部推翻","不相信自己值得被好好對待"],
+"男主角":["情緒穩定、會把「我需要你說清楚」當作愛的語言的 green flag","習慣先問「你現在需要陪伴還是空間」的溫柔年上","外表低調的世家繼承人，實際上什麼都先讓她決定","話不多但每次都記得她說過的小事","會為她調整環境（燈光、聲音、座位）卻從不邀功的人","自己也在學習重新被愛的成熟男人，不逼她、也不躲開","眼鏡後面有一雙很安靜的眼睛，總是慢半拍才表達喜歡","在舊式家族裡刻意走另一條路的醫師／建築師","外表有點彆扭、生活規律到近乎固執的獨居中年男","自己也有感官需求，兩人互相為對方調整環境","曾經很失敗、現在慢慢站穩的人，用溫柔而不是力量保護她","願意說「我不懂，你教我」的人"],
+"年齡差與關係":["男大女小：他年長 9 歲，兩人從朋友開始","姊弟戀：她年長 4 歲，他是努力追上的溫柔學弟","男大女小：他是她朋友的哥哥，輩分尷尬但誠實","年長的他曾是她的前輩，如今對等相處","差 12 歲，她主導關係節奏，他全程尊重","兩人年齡差不大，但人生階段錯位（她剛開始，他已經走過）","他是中年、她是剛出社會的年輕人，重點是互相理解","先成為最好的朋友，再問「我們可不可以不只是朋友」"],
+"核心套路":["Slow Burn：十章之後才第一次牽手","溝通差異被翻譯成愛的語言（雙向同理）","soft femdom：她決定速度，他用行動回應","一起完成一件小事（修一輛舊腳踏車、整理一座花園）","被看見的瞬間：他注意到她沒說出口的感官不適","細水長流：日常儀式比告白更重要","重逢：十年後在同一座城市換了身份相見","她拒絕被拯救，他學會站在旁邊","安全屋：這個人的身邊，是她唯一不需要 masking 的地方","確診之後：重新整理過去，被一個人溫柔地陪著理解","互相教對方自己的語言：一個學感官，一個學直說","特殊興趣成為兩人的共同世界","同伴療癒：兩個神經多樣性的人說「你不用解釋」","時間回溯式浪漫：回到過去，只為把一句話說對"],
+"世界與場景":["台北老社區的頂樓花園","京都舊書店與雨天的電車","有一隻貓的老公寓，窗外是鐵道","植物園溫室，下午三點光線最好","海邊小鎮的民宿，只有淡季才安靜","一座只在雨季開放的圖書館","醫院後門的小吃攤與深夜便利商店","山間小學改建的工作室","老市場的早晨與二樓的小書桌"],
+"暗線與謎團（輕）":["她收到一張寄錯地址的明信片，連著半個世紀的偶遇","兩個人其實在夢裡見過，現實第一次碰面卻都裝作不認識","一本舊書的夾頁寫著他的名字，但他說從沒看過這本書","同一天裡總是遇到同一個陌生人","兩個人的記憶互相拼合，才拼出一段被抹去的過去"],
+"一個溫柔場景":["他幫她把耳機音量調到剛好，什麼都沒問","她崩潰後，他只是坐在旁邊，開一盞小燈","兩人第一次約定「暗號」，用來表示現在需要安靜","他記得她討厭哪種布料，下次準備了另一件","她在他面前第一次卸下 masking，笑得很醜很真","下雨天，兩人共用一把傘但保持剛好的距離","他沒問太多，只是遞給她一杯溫的飲料","她跟他說起自己的特殊興趣，他是真的在聽","他說「你可以慢慢說，我有時間」","她第一次主動牽他的手，然後兩個人都假裝沒事"]};
+var KEYS=Object.keys(P),state={},locks={},favs=[],extra={};
+var TASKS=["寫一句最喜歡的角色會說的話，不用有前後文。","描寫一個感官細節：聲音、光、質地、氣味，任選一個。","把角色此刻的『不想說出口』寫成三行。","寫一場只有 100 字的相遇，不要告白。","列出這個故事的 3 個『不能發生的事』。","讓兩個角色在同一間房間，什麼都不做，寫 5 分鐘。","寫下你現在最想看到的一個畫面，然後再補上前一秒。","把上次卡住的場景換成雨天，再試一次。","選一首喜歡的歌，寫它會是哪一段劇情的配樂。","現在不寫：只幫角色取三個可能的名字。"];
+function $(i){return document.getElementById(i)}
+function pool(k){return P[k].concat(extra[k]||[])}
+function load(){try{favs=JSON.parse(localStorage.getItem("mf")||"[]");extra=JSON.parse(localStorage.getItem("me")||"{}")}catch(e){}}
+function store(){try{localStorage.setItem("mf",JSON.stringify(favs));localStorage.setItem("me",JSON.stringify(extra))}catch(e){}}
+function roll(){KEYS.forEach(function(k){if(!locks[k]){var p=pool(k);state[k]=p[Math.floor(Math.random()*p.length)]}});draw()}
+function draw(){$("slots").innerHTML=KEYS.map(function(k){return '<div class="slot"><div class="lb">'+k+'</div><div class="tx">'+(state[k]||'')+'</div><button class="lk'+(locks[k]?' on':'')+'" data-k="'+k+'">'+(locks[k]?'🔒':'🔓')+'</button></div>'}).join("");
+ document.querySelectorAll(".lk").forEach(function(b){b.onclick=function(){locks[b.dataset.k]=!locks[b.dataset.k];draw()}})}
+function text(){return KEYS.map(function(k){return "【"+k+"】"+state[k]}).join("\n")}
+function drawFavs(){$("favs").innerHTML=favs.length?favs.map(function(f,i){return '<div class="fav">'+f+'<div><button class="btn" data-i="'+i+'" style="margin-top:6px;padding:3px 12px">刪除</button></div></div>'}).join(""):'<p class="hint">還沒有收藏。</p>';
+ document.querySelectorAll(".fav .btn").forEach(function(b){b.onclick=function(){favs.splice(+b.dataset.i,1);store();drawFavs()}})}
+function show(id){["gen","rescue"].forEach(function(s){$(s).className=s===id?"on":""});document.querySelectorAll("#tabs button").forEach(function(b){b.className=b.dataset.t===id?"on":""})}
+$("tabs").innerHTML=[["gen","🎲 靈感生成器"],["rescue","🆘 卡關急救"]].map(function(t){return '<button data-t="'+t[0]+'">'+t[1]+'</button>'}).join("");
+document.querySelectorAll("#tabs button").forEach(function(b){b.onclick=function(){show(b.dataset.t)}});
+$("addSlot").innerHTML=KEYS.map(function(k){return '<option>'+k+'</option>'}).join("");
+$("roll").onclick=roll;
+$("save").onclick=function(){if(!state[KEYS[0]])return;favs.unshift(text());store();drawFavs()};
+$("copy").onclick=function(){try{navigator.clipboard.writeText(text())}catch(e){}};
+$("addBtn").onclick=function(){var v=$("addTxt").value.trim(),k=$("addSlot").value;if(!v)return;(extra[k]=extra[k]||[]).push(v);store();$("addTxt").value=""};
+$("taskBtn").onclick=function(){$("task").textContent=TASKS[Math.floor(Math.random()*TASKS.length)]};
+load();show("gen");roll();drawFavs();$("taskBtn").click();
+</script>
+</body>
+</html>
